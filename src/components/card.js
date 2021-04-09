@@ -1,4 +1,6 @@
-const Card = (article) => {
+import axios from 'axios'
+
+const Card = (headline, authorPhoto, authorName) => {
   // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -6,20 +8,50 @@ const Card = (article) => {
   // The tags used, the hierarchy of elements and their attributes must match the provided markup exactly!
   // The text inside elements will be set using their `textContent` property (NOT `innerText`).
   // Add a listener for click events so that when a user clicks on a card, the headline of the article is logged to the console.
-  //
-  // <div class="card">
-  //   <div class="headline">{ headline }</div>
-  //   <div class="author">
-  //     <div class="img-container">
-  //       <img src={ authorPhoto }>
-  //     </div>
-  //     <span>By { authorName }</span>
-  //   </div>
-  // </div>
-  //
+  
+  //making my elements
+  const div1 = document.createElement("div")
+  const div2 = document.createElement("div")
+  const div3 = document.createElement("div")
+  const div4 = document.createElement("div")
+  const img = document.createElement("img")
+  const span = document.createElement("span")
+
+  //class names
+  div1.classList.add("card")
+  div2.classList.add("headline")
+  div3.classList.add("author")
+  div4.classList.add("img-container")
+
+  //heirarchy
+  div1.appendChild(div2)
+  div1.appendChild(div3)
+  div3.appendChild(div4)
+  div4.appendChild(img)
+  div3.appendChild(span)
+
+  //textContent/img section
+  div1.textContent = headline;
+  img.src = authorPhoto;
+  span.textContent = `By ${authorName}`;
 }
 
-const cardAppender = (selector) => {
+console.log(Card())
+
+const cardAppender = () => {
+
+axios.get(`https://lambda-times-api.herokuapp.com/articles`)
+.then(resp => { 
+  const infoJ = resp.data.articles.javascript
+  console.log("OVER HERE!",infoJ)
+
+ infoJ.forEach(element => {
+   const entry = document.querySelector(".cards-container")
+  entry.append(Card(infoJ))
+ });
+    
+})
+
   // TASK 6
   // ---------------------
   // Implement this function that takes a css selector as its only argument.
@@ -31,3 +63,14 @@ const cardAppender = (selector) => {
 }
 
 export { Card, cardAppender }
+//
+  // <div class="card">
+  //   <div class="headline">{ headline }</div>
+  //   <div class="author">
+  //     <div class="img-container">
+  //       <img src={ authorPhoto }>
+  //     </div>
+  //     <span>By { authorName }</span>
+  //   </div>
+  // </div>
+  //
